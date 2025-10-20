@@ -1,0 +1,41 @@
+name: security
+
+on:
+  push:
+    branches:
+      - main
+      - stable
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 1'  # Run weekly on Mondays
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  security-audit:
+    name: dependency-security-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: uv sync --all-extras
+
+      - name: Run security audit
+        run: pip-audit --desc --requirement <(uv pip freeze)
+        continue-on-error: true
+
+      - name: Run security audit (strict mode)
+        run: pip-audit --strict --requirement <(uv pip freeze)
