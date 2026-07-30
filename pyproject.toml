@@ -20,7 +20,7 @@ dependencies = [
     "patchright>=1.51.0",
     "markdownify==1.1.0",
     "langchain-core>=1.2.22",
-    "langchain-openai==0.3.11",
+    "langchain-openai==1.1.14",
     "langchain-anthropic==1.4.6",
     "langchain-ollama==0.3.0",
     "langchain-google-genai==2.1.2",
